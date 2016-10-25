@@ -15,9 +15,20 @@
 #include <algorithm>
 #include <map>
 
+#include "mpi.h"
+
 using namespace std;
-#define M 5 //#columns
-#define N 5  //#rows
+#define M 3 //#columns
+#define N 3  //#rows
+
+typedef struct VEBPInformation {
+	int firstNumb;
+	int secondNumb;
+	int thirdNumb;
+	char *myFile;
+} VEBP_type;
+
+
 
 
 // TODO: reference additional headers your program requires here

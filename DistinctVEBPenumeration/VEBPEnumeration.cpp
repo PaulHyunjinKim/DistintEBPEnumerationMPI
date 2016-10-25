@@ -3,20 +3,35 @@
 #include "HEBPEnumeration.h"
 #include "EBPOperations.h"
 
-void VEBPEnumeartion(ofstream &myFile)
+void VEBPEnumeartion(MPI_Datatype mpi_vebp_type)
 {
 	int OneBitsNumber = 0;
 	int startNumberOfBitsInVEBP = ceilf((float)(M*N - 1) / 2);
+	VEBP_type send;
 	if (M != N)
 		startNumberOfBitsInVEBP = N - 1;
-
-
+	int receiver = 1;
 	for (OneBitsNumber = startNumberOfBitsInVEBP; OneBitsNumber <= N*N - N; OneBitsNumber++)//enumerate VEBP based on # 1bits on VEBP
 	{
-		vector<int> result;
-		//send message to VEBPEnumeration...//
-		SetOneBitNumberOnEachSectionVEBP(OneBitsNumber, 0, result, 0, myFile);
+		
+		
+		send.firstNumb = OneBitsNumber;
+		send.secondNumb = 2;
+		send.thirdNumb = 3;
+		
+		char* tempChar = (char*)malloc(25);//"EBPFileMPI.txt";
+		sprintf_s(tempChar, 25, "EBPFileMPI_%d.txt", receiver);
+		send.myFile = tempChar;
+		//cout << "i " << send.myFile << endl;
+		MPI_Send(&send, 1, mpi_vebp_type, receiver, 0, MPI_COMM_WORLD);
+		//receiver++;
+		
+		//
+		////send message to VEBPEnumeration...//
+		//SetOneBitNumberOnEachSectionVEBP(OneBitsNumber, 0, result, 0, myFile);
 	}
+	/*send.firstNumb = -1;
+	MPI_Send(&send, 1, mpi_vebp_type, 1, 0, MPI_COMM_WORLD);*/
 
 }
 
