@@ -3,7 +3,7 @@
 
 int main()
 {
-
+	cout << "asdfasdf" << endl;
 	ofstream EBPFile;
 	EBPFile.open("EBPFile.txt");
 	VEBPEnumeartion(EBPFile);
