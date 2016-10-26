@@ -19,12 +19,10 @@ void VEBPEnumeartion(MPI_Datatype mpi_vebp_type)
 		send.secondNumb = 2;
 		send.thirdNumb = 3;
 		
-		char* tempChar = (char*)malloc(25);//"EBPFileMPI.txt";
-		sprintf_s(tempChar, 25, "EBPFileMPI_%d.txt", receiver);
-		send.myFile = tempChar;
+		sprintf_s(send.myFile, sizeof(send.myFile), "EBPFileMPI_%d.txt", receiver);
 		//cout << "i " << send.myFile << endl;
 		MPI_Send(&send, 1, mpi_vebp_type, receiver, 0, MPI_COMM_WORLD);
-		//receiver++;
+		receiver++;
 		
 		//
 		////send message to VEBPEnumeration...//

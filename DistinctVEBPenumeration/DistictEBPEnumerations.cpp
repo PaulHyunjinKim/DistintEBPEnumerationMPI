@@ -1,13 +1,14 @@
 #include "stdafx.h"
 #include "VEBPEnumeration.h"
-
+#include <ctime>
 
 
 
 int main(int argc, char* argv[])
 {
-
 	MPI_Init(&argc, &argv);
+	
+	clock_t begin = clock();
 
 	int rank;
 
@@ -31,47 +32,68 @@ int main(int argc, char* argv[])
 	if (rank == 0)
 	{
 
-		VEBP_type send;
-		send.myFile = (char*)malloc(20);//"EBPFileMPI.txt";
-		sprintf_s(send.myFile, 20, "EBPFileMPI_%d.txt", 1);
+		//VEBP_type send;
+		
 		//send.myFile = tempChar;
 		//cout << "i " << send.myFile << endl;
-		//send.myFile = "EBPFileMPI_%d.txt";
+		//send.myFile = temp;
+		//strcpy_s(send.myFile, 20, temp);
+		/*int i = 5;
+		sprintf_s(send.myFile, sizeof(send.myFile), "File_%d.txt", i);*/
+		//send.myFile = (char*)temp;
+		
 		//strcpy_s(send.myFile, 20, tempChar);
-		send.myFile = "asdf.txt";//////////////////////////////no work with sprintf......try to use sstream..
-		cout << "i " << send.myFile << endl;
-		MPI_Send(&send, 1, mpi_vebp_type, 1, 0, MPI_COMM_WORLD);
+		
+		//int currRank = 5;
+		//stringstream fileNameStream("EBPFileMPI_");
+		//fileNameStream << currRank << ".txt";
+		//string fileName = fileNameStream.str();
+		//strcpy_s(send.myFile, 20, fileName.c_str());
+		//send.myFile = (char*)fileName.c_str();
+		/*cout << "size 1 " << sizeof(send.myFile)<< endl;
+		cout << "send.myfile: " << send.myFile << endl;
+		MPI_Send(&send, 1, mpi_vebp_type, 1, 0, MPI_COMM_WORLD);*/
 
 
 		cout << "rank: " << rank << endl;
-		//VEBPEnumeartion(mpi_vebp_type);
+		VEBPEnumeartion(mpi_vebp_type);
 		cout <<"process "<<rank<< " Finished...hit Enter to exit.." << endl;
 	}
-	else if (rank >= 1 && rank <= 3)
+	else if (rank >= 1 && rank <= 5)
 	{
 		cout << "rank: " << rank << endl;
 		VEBP_type recv;
 		
 		MPI_Recv(&recv, 1, mpi_vebp_type, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
+		cout << "size 2 " << recv.firstNumb << endl;
+		
 		cout << recv.myFile << endl;
 
+		ofstream EBPFile;
+		EBPFile.open(recv.myFile);
+		vector<int> result;
+		SetOneBitNumberOnEachSectionVEBP(recv.firstNumb, 0, result, 0, EBPFile);
+		
 		//ofstream EBPFile;
 		//EBPFile.open(recv.myFile);
 		/*while (recv.firstNumb != -1)
 		{
-			vector<int> result;
-			SetOneBitNumberOnEachSectionVEBP(recv.firstNumb, 0, result, 0, EBPFile);
+			
+			
 			MPI_Recv(&recv, 1, mpi_vebp_type, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 		}*/
 						
-		//EBPFile.close();
+		EBPFile.close();
 		
 
 
 		cout << "process " << rank << " Finished...hit Enter to exit.." << endl;
 	}
 	
+	clock_t end = clock();
+	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	cout << "rank " << rank << " elapsed time "<<elapsed_secs << endl;
+
 	MPI_Finalize();
 	
 	//getchar();
