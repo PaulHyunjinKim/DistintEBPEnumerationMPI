@@ -108,7 +108,7 @@ void distinctHEBPEnumeartion(int currentColumn, vector<vector<int>> CCNumbMatrix
 		bool HEBPIsDistinct = true;
 		HEBPIsDistinct = checkIfDistinctHEBP(VEBP, HEBP);
 		//cout << "mirroredHEBPIsDistinct " << HEBPIsDistinct << endl;
-		if((M == N) && (M / 2 == 1)  && (VENumb == (M*N - 1) / 2) && HEBPIsDistinct)
+		if((M == N) && (M % 2 == 1)  && (VENumb == (M*N - 1) / 2) && HEBPIsDistinct)
 		{
 			HEBPIsDistinct = checkRotationalSymmetryOfHEBP(VEBP, HEBP);
 		}
@@ -290,7 +290,7 @@ bool newCCNumb_iplus1(int currentColumn, vector<vector<int>> &CCNumbMatrix,  vec
 			}
 			CCNumbTree.erase(it2);
 		}
-
+		
 		else if (CCNumbMatrix[currentColumn][*edgeIndex] > CCNumbMatrix[currentColumn + 1][*edgeIndex])
 		{
 			
